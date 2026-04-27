@@ -36,45 +36,4 @@ class ComprehensionChecker(BaseChecker):
         "use-list-comprehension", "use-dict-comprehension", "use-list-copy"
     )
     def leave_for(self, node: nodes.For):
-        if len(node.body) != 1:
-            return
-        if isinstance(node.body[0], nodes.If) and not node.body[0].orelse:
-            # TODO : Support a simple, single else statement
-            if isinstance(node.body[0].body[0], nodes.Expr):
-                if not isinstance(node.body[0].body[0].value, nodes.Call):
-                    return
-                # Is append call.
-                if not isinstance(node.body[0].body[0].value.func, nodes.Attribute):
-                    return
-                if not node.body[0].body[0].value.func.attrname in ["append", "insert"]:
-                    return
-                self.add_message("use-list-comprehension", node=node)
-            elif isinstance(node.body[0].body[0], nodes.Assign):
-                if len(node.body[0].body[0].targets) != 1:
-                    return
-                if not isinstance(node.body[0].body[0].targets[0], nodes.Subscript):
-                    return
-                if not isinstance(node.body[0].body[0].targets[0].value, nodes.Name):
-                    return
-                inferred_value = safe_infer(node.body[0].body[0].targets[0].value)
-                if isinstance(inferred_value, nodes.Dict):
-                    self.add_message("use-dict-comprehension", node=node)
-        elif isinstance(node.body[0], nodes.Expr):
-            if not isinstance(node.body[0].value, nodes.Call):
-                return
-            # Is append call.
-            if not isinstance(node.body[0].value.func, nodes.Attribute):
-                return
-            if not node.body[0].value.func.attrname in ["append", "insert"]:
-                return
-            self.add_message("use-list-copy", node=node)
-        elif isinstance(node.body[0], nodes.Assign):
-            if len(node.body[0].targets) != 1:
-                return
-            if not isinstance(node.body[0].targets[0], nodes.Subscript):
-                return
-            if not isinstance(node.body[0].targets[0].value, nodes.Name):
-                return
-            inferred_value = safe_infer(node.body[0].targets[0].value)
-            if isinstance(inferred_value, nodes.Dict):
-                self.add_message("use-dict-comprehension", node=node)
+        pass

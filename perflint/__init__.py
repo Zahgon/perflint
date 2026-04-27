@@ -16,8 +16,4 @@ def register(linter: "PyLinter") -> None:
 
     :param linter: The linter to register the checker to.
     """
-
-    linter.register_checker(ForLoopChecker(linter))
-    linter.register_checker(LoopInvariantChecker(linter))
-    linter.register_checker(ListChecker(linter))
-    linter.register_checker(ComprehensionChecker(linter))
+    pass

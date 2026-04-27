@@ -24,57 +24,31 @@ class ListChecker(BaseChecker):
         self._lists_to_watch: List[Dict[str, nodes.AssignName]] = []
 
     def visit_assign(self, node: nodes.Assign):
-        if not isinstance(node.value, nodes.List):
-            return
-        if len(node.targets) > 1:
-            return
-        if isinstance(node.targets[0], nodes.AssignName):
-            if node.targets[0].name == "__all__":
-                return
-            self._lists_to_watch[-1][node.targets[0].name] = node.targets[0]
+        pass
 
     def visit_module(self, node: nodes.Module):
-        self._lists_to_watch.append({})
+        pass
 
     def _raise_for_scope(self):
-        _lists = self._lists_to_watch.pop()
-        for _assignment in _lists.values():
-            self.add_message("use-tuple-over-list", node=_assignment.parent.value)
+        pass
 
     @checker_utils.only_required_for_messages("use-tuple-over-list")
     def leave_module(self, node: nodes.Module):
-        self._raise_for_scope()
+        pass
 
     def visit_functiondef(self, node: nodes.FunctionDef):
-        self._lists_to_watch.append({})
+        pass
 
     @checker_utils.only_required_for_messages("use-tuple-over-list")
     def leave_functiondef(self, node: nodes.FunctionDef):
-        self._raise_for_scope()
+        pass
 
     def visit_call(self, node: nodes.Call) -> None:
         """Look for method calls to list nodes."""
-        if not isinstance(node.func, nodes.Attribute):
-            return
-        if not isinstance(node.func.expr, nodes.Name):
-            return
-        # TODO : Filter from non-mutation methods
-        self._mark_mutated(node.func.expr)
+        pass
 
     def _mark_mutated(self, _name: nodes.Name):
-        if _name.name in self._lists_to_watch[-1]:
-            del self._lists_to_watch[-1][_name.name]
-            return
-        scope, _ = _name.lookup(_name.name)
-        if not isinstance(scope, nodes.Module):
-            return
-        if _name.name in scope.globals \
-            and _name.name in self._lists_to_watch[0]:
-            del self._lists_to_watch[0][_name.name]
+        pass
 
     def visit_subscript(self, node: nodes.Subscript):
-        if not isinstance(node.parent, nodes.Assign):
-            return
-        if not isinstance(node.value, nodes.Name):
-            return
-        self._mark_mutated(node.value)
+        pass
